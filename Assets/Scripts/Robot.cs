@@ -47,6 +47,14 @@ public class Robot : MonoBehaviour
 
     public float YDist { get; private set; }
 
+    public float Kth_pos { get; private set; }
+
+    public float Kth_neg { get; private set; }
+
+    public float Kx { get; private set; }
+
+    public float Ky { get; private set; }
+
 
 
     // Start is called before the first frame update
@@ -141,6 +149,8 @@ public class Robot : MonoBehaviour
 
                 goalRotVelocityArrow.transform.right = rotVelocity;
             }
+
+            Debug.Log(rotVelocity);
 
             goalRotVelocityArrow.transform.right = rotVelocity;
 
@@ -288,6 +298,9 @@ public class Robot : MonoBehaviour
             kx = 1f / (float)xfaces;
             ky = 1f / (float)yfaces;
 
+            Kx = kx;
+            Ky = ky;
+
 
             //Rotational +
 
@@ -349,11 +362,15 @@ public class Robot : MonoBehaviour
                 }
             }
 
-            kRotP = 1f / kRotP;
+
+            if (kRotP != 0)
+                kRotP = 1f / kRotP;
 
             Debug.Log("k_th+: " + kRotP);
 
             kthp = kRotP;
+
+            Kth_pos = kthp;
 
 
             //Rotational -
@@ -410,12 +427,16 @@ public class Robot : MonoBehaviour
                 }
             }
 
-            kRotN = 1f / kRotN;
+            if (kRotN != 0)
+                kRotN = 1f / kRotN;
 
             Debug.Log("k_th-: " + kRotN);
 
 
             kthn = kRotN;
+
+
+            Kth_neg = kthn;
 
         }
     }
