@@ -23,6 +23,14 @@ public class Robot : MonoBehaviour
     [SerializeField]
     private GameObject forceArrow;
 
+    [SerializeField]
+    private GameObject geomGoalArrow;
+
+    [SerializeField]
+    private GameObject geomForceArrow;
+
+    [SerializeField]
+    private GameObject geometricCenter;
 
     [SerializeField]
     private GameObject goalVelocityArrow;
@@ -70,6 +78,9 @@ public class Robot : MonoBehaviour
         {
             goalArrow.SetActive(false);
             forceArrow.SetActive(false);
+            geomGoalArrow.SetActive(false);
+            geomForceArrow.SetActive(false);
+
         }
 
         else
@@ -79,7 +90,14 @@ public class Robot : MonoBehaviour
             goalArrow.SetActive(true);
             forceArrow.SetActive(true);
 
+            geomGoalArrow.SetActive(true);
+            geomForceArrow.SetActive(true);
+
             goalArrow.transform.right = goal.transform.position - goalArrow.transform.position;
+
+            geomGoalArrow.transform.position = geometricCenter.transform.position;
+
+            geomGoalArrow.transform.right = goal.transform.position - geometricCenter.transform.position;
 
             Vector2 totalForce = Vector2.zero;
 
@@ -96,6 +114,10 @@ public class Robot : MonoBehaviour
             Torque = totalTorque;
 
             forceArrow.transform.right = transform.TransformVector(totalForce);
+
+            geomForceArrow.transform.position = geometricCenter.transform.position;
+
+            geomForceArrow.transform.right = transform.TransformVector(totalForce);
 
 
             //Calculate goal velocity
@@ -437,6 +459,50 @@ public class Robot : MonoBehaviour
 
 
             Kth_neg = kthn;
+
+
+
+            //Update geometric center
+
+            if (modules.Count > 0)
+            {
+                float minX = 0;
+                float maxX = 0;
+                float minY = 0;
+                float maxY = 0;
+                    
+                foreach (KeyValuePair<Vector2Int, GameObject> module in modules)
+                {
+                    minX = module.Value.transform.position.x;
+
+                    maxX = module.Value.transform.position.x;
+
+                    minY = module.Value.transform.position.y;
+
+                    maxY = module.Value.transform.position.y;
+
+                    break;
+                }
+
+                foreach (KeyValuePair<Vector2Int, GameObject> module in modules)
+                {
+                    if (module.Value.transform.position.x < minX)
+                        minX = module.Value.transform.position.x;
+
+                    if (module.Value.transform.position.x > maxX)
+                        maxX = module.Value.transform.position.x;
+
+                    if (module.Value.transform.position.y < minY)
+                        minY = module.Value.transform.position.y;
+
+                    if (module.Value.transform.position.y > maxY)
+                        maxY = module.Value.transform.position.y;
+
+                }
+
+
+                geometricCenter.transform.position = new Vector3((minX + maxX) / 2f, (minY + maxY) / 2f, 0);
+            }
 
         }
     }
