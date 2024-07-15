@@ -10,7 +10,7 @@ public class Robot : MonoBehaviour
 
     public GameObject goal;
 
-    private Dictionary<Vector2Int, GameObject> modules;
+    public Dictionary<Vector2Int, GameObject> Modules { get; private set; }
 
     //Offset of (0, 0) module position from robot CoM world position
     private Vector2 gridOffset = Vector2.zero;
@@ -68,13 +68,13 @@ public class Robot : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        modules = new Dictionary<Vector2Int, GameObject>();
+        Modules = new Dictionary<Vector2Int, GameObject>();
     }
 
     //Update controller and robot movement
     private void FixedUpdate()
     {
-        if (modules.Count == 0)
+        if (Modules.Count == 0)
         {
             goalArrow.SetActive(false);
             forceArrow.SetActive(false);
@@ -103,7 +103,7 @@ public class Robot : MonoBehaviour
 
             float totalTorque = 0;
 
-            foreach (KeyValuePair<Vector2Int, GameObject> module in modules)
+            foreach (KeyValuePair<Vector2Int, GameObject> module in Modules)
             {
                 totalForce += module.Value.GetComponent<Module>().ThrustForce();
 
@@ -221,37 +221,37 @@ public class Robot : MonoBehaviour
 
             bool moduleInThisPosition = false;
 
-            if (modules.ContainsKey(mousePositionInModuleCoords))
+            if (Modules.ContainsKey(mousePositionInModuleCoords))
                 moduleInThisPosition = true;
 
             bool moduleNeighbouringThisPosition = false;
 
-            if (modules.ContainsKey(mousePositionInModuleCoords + new Vector2Int(1, 0)))
+            if (Modules.ContainsKey(mousePositionInModuleCoords + new Vector2Int(1, 0)))
                 moduleNeighbouringThisPosition = true;
 
-            if (modules.ContainsKey(mousePositionInModuleCoords + new Vector2Int(-1, 0)))
+            if (Modules.ContainsKey(mousePositionInModuleCoords + new Vector2Int(-1, 0)))
                 moduleNeighbouringThisPosition = true;
 
-            if (modules.ContainsKey(mousePositionInModuleCoords + new Vector2Int(0, 1)))
+            if (Modules.ContainsKey(mousePositionInModuleCoords + new Vector2Int(0, 1)))
                 moduleNeighbouringThisPosition = true;
 
-            if (modules.ContainsKey(mousePositionInModuleCoords + new Vector2Int(0, -1)))
+            if (Modules.ContainsKey(mousePositionInModuleCoords + new Vector2Int(0, -1)))
                 moduleNeighbouringThisPosition = true;
 
             Vector2 modulePositionInRobot = (Vector2)mousePositionInModuleCoords * moduleSize;
 
 
             //If there is a neighbour tile (or no tiles at all) and no tile in this position already, then add a tile
-            if (Input.GetMouseButtonDown(0) && !moduleInThisPosition && (moduleNeighbouringThisPosition || modules.Count == 0))
+            if (Input.GetMouseButtonDown(0) && !moduleInThisPosition && (moduleNeighbouringThisPosition || Modules.Count == 0))
             {
-                modules[mousePositionInModuleCoords] = Instantiate(modulePrefab, modulePositionInRobot, transform.rotation, transform);
+                Modules[mousePositionInModuleCoords] = Instantiate(modulePrefab, modulePositionInRobot, transform.rotation, transform);
             }
 
             //If there is a module in this position, delete it
             if (Input.GetMouseButtonDown(1) && moduleInThisPosition)
             {
-                Destroy(modules[mousePositionInModuleCoords]);
-                modules.Remove(mousePositionInModuleCoords);
+                Destroy(Modules[mousePositionInModuleCoords]);
+                Modules.Remove(mousePositionInModuleCoords);
             }
 
             //Update module positions, robot com etc.
@@ -259,12 +259,12 @@ public class Robot : MonoBehaviour
             //Find average world position of modules
             Vector3 averagePos = Vector3.zero;
 
-            foreach (KeyValuePair<Vector2Int, GameObject> module in modules)
+            foreach (KeyValuePair<Vector2Int, GameObject> module in Modules)
             {
                 averagePos += module.Value.transform.position;
             }
 
-            averagePos /= modules.Count;
+            averagePos /= Modules.Count;
 
             //Set robot position to this
             Vector3 deltaVector = averagePos - transform.position;
@@ -272,7 +272,7 @@ public class Robot : MonoBehaviour
             transform.position += deltaVector;
 
             //and shift all module positions accordingly
-            foreach (KeyValuePair<Vector2Int, GameObject> module in modules)
+            foreach (KeyValuePair<Vector2Int, GameObject> module in Modules)
             {
                 module.Value.transform.position -= deltaVector;
             }
@@ -282,15 +282,15 @@ public class Robot : MonoBehaviour
 
 
             //Update faces
-            foreach (KeyValuePair<Vector2Int, GameObject> module in modules)
+            foreach (KeyValuePair<Vector2Int, GameObject> module in Modules)
             {
-                module.Value.GetComponent<Module>().rightFace.SetActive(!modules.ContainsKey(module.Key + new Vector2Int(1, 0)));
+                module.Value.GetComponent<Module>().rightFace.SetActive(!Modules.ContainsKey(module.Key + new Vector2Int(1, 0)));
 
-                module.Value.GetComponent<Module>().leftFace.SetActive(!modules.ContainsKey(module.Key + new Vector2Int(-1, 0)));
+                module.Value.GetComponent<Module>().leftFace.SetActive(!Modules.ContainsKey(module.Key + new Vector2Int(-1, 0)));
 
-                module.Value.GetComponent<Module>().topFace.SetActive(!modules.ContainsKey(module.Key + new Vector2Int(0, 1)));
+                module.Value.GetComponent<Module>().topFace.SetActive(!Modules.ContainsKey(module.Key + new Vector2Int(0, 1)));
 
-                module.Value.GetComponent<Module>().bottomFace.SetActive(!modules.ContainsKey(module.Key + new Vector2Int(0, -1)));
+                module.Value.GetComponent<Module>().bottomFace.SetActive(!Modules.ContainsKey(module.Key + new Vector2Int(0, -1)));
             }
 
             //Calculate K values
@@ -301,14 +301,14 @@ public class Robot : MonoBehaviour
             int yfaces = 0;
 
             //number of x faces
-            foreach (KeyValuePair<Vector2Int, GameObject> module in modules)
+            foreach (KeyValuePair<Vector2Int, GameObject> module in Modules)
             {
-                if (!modules.ContainsKey(module.Key + new Vector2Int(1, 0)))
+                if (!Modules.ContainsKey(module.Key + new Vector2Int(1, 0)))
                 {
                     xfaces++;
                 }
 
-                if (!modules.ContainsKey(module.Key + new Vector2Int(0, 1)))
+                if (!Modules.ContainsKey(module.Key + new Vector2Int(0, 1)))
                 {
                     yfaces++;
                 }
@@ -330,13 +330,13 @@ public class Robot : MonoBehaviour
 
             Debug.Log("Calculating k rot");
 
-            foreach (KeyValuePair<Vector2Int, GameObject> module in modules)
+            foreach (KeyValuePair<Vector2Int, GameObject> module in Modules)
             {
 
                 Vector2 crPos = module.Key + gridOffset;
 
                 //+x face
-                if (!modules.ContainsKey(module.Key + new Vector2Int(1, 0)) && crPos.y > 0)
+                if (!Modules.ContainsKey(module.Key + new Vector2Int(1, 0)) && crPos.y > 0)
                 {
                     Vector2 facePos = crPos + new Vector2(0.5f, 0);
 
@@ -348,7 +348,7 @@ public class Robot : MonoBehaviour
                 }
 
                 //-x face
-                if (!modules.ContainsKey(module.Key + new Vector2Int(-1, 0)) && crPos.y < 0)
+                if (!Modules.ContainsKey(module.Key + new Vector2Int(-1, 0)) && crPos.y < 0)
                 {
                     Vector2 facePos = crPos + new Vector2(-0.5f, 0);
 
@@ -360,7 +360,7 @@ public class Robot : MonoBehaviour
                 }
 
                 //+y face
-                if (!modules.ContainsKey(module.Key + new Vector2Int(0, 1)) && crPos.x < 0)
+                if (!Modules.ContainsKey(module.Key + new Vector2Int(0, 1)) && crPos.x < 0)
                 {
                     Vector2 facePos = crPos + new Vector2(0, 0.5f);
 
@@ -372,7 +372,7 @@ public class Robot : MonoBehaviour
                 }
 
                 //-y face
-                if (!modules.ContainsKey(module.Key + new Vector2Int(0, -1)) && crPos.x > 0)
+                if (!Modules.ContainsKey(module.Key + new Vector2Int(0, -1)) && crPos.x > 0)
                 {
                     Vector2 facePos = crPos + new Vector2(0, -0.5f);
 
@@ -399,13 +399,13 @@ public class Robot : MonoBehaviour
 
             float kRotN = 0;
 
-            foreach (KeyValuePair<Vector2Int, GameObject> module in modules)
+            foreach (KeyValuePair<Vector2Int, GameObject> module in Modules)
             {
 
                 Vector2 crPos = module.Key + gridOffset;
 
                 //+x face
-                if (!modules.ContainsKey(module.Key + new Vector2Int(1, 0)) && crPos.y < 0)
+                if (!Modules.ContainsKey(module.Key + new Vector2Int(1, 0)) && crPos.y < 0)
                 {
                     Vector2 facePos = crPos + new Vector2(0.5f, 0);
 
@@ -416,7 +416,7 @@ public class Robot : MonoBehaviour
                 }
 
                 //-x face
-                if (!modules.ContainsKey(module.Key + new Vector2Int(-1, 0)) && crPos.y > 0)
+                if (!Modules.ContainsKey(module.Key + new Vector2Int(-1, 0)) && crPos.y > 0)
                 {
                     Vector2 facePos = crPos + new Vector2(-0.5f, 0);
 
@@ -427,7 +427,7 @@ public class Robot : MonoBehaviour
                 }
 
                 //+y face
-                if (!modules.ContainsKey(module.Key + new Vector2Int(0, 1)) && crPos.x > 0)
+                if (!Modules.ContainsKey(module.Key + new Vector2Int(0, 1)) && crPos.x > 0)
                 {
                     Vector2 facePos = crPos + new Vector2(0, 0.5f);
 
@@ -438,7 +438,7 @@ public class Robot : MonoBehaviour
                 }
 
                 //-y face
-                if (!modules.ContainsKey(module.Key + new Vector2Int(0, -1)) && crPos.x < 0)
+                if (!Modules.ContainsKey(module.Key + new Vector2Int(0, -1)) && crPos.x < 0)
                 {
                     Vector2 facePos = crPos + new Vector2(0, -0.5f);
 
@@ -464,14 +464,14 @@ public class Robot : MonoBehaviour
 
             //Update geometric center
 
-            if (modules.Count > 0)
+            if (Modules.Count > 0)
             {
                 float minX = 0;
                 float maxX = 0;
                 float minY = 0;
                 float maxY = 0;
                     
-                foreach (KeyValuePair<Vector2Int, GameObject> module in modules)
+                foreach (KeyValuePair<Vector2Int, GameObject> module in Modules)
                 {
                     minX = module.Value.transform.position.x;
 
@@ -484,7 +484,7 @@ public class Robot : MonoBehaviour
                     break;
                 }
 
-                foreach (KeyValuePair<Vector2Int, GameObject> module in modules)
+                foreach (KeyValuePair<Vector2Int, GameObject> module in Modules)
                 {
                     if (module.Value.transform.position.x < minX)
                         minX = module.Value.transform.position.x;

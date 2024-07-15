@@ -9,6 +9,4 @@ public class Environment : MonoBehaviour
     
     [field:SerializeField]
     public Robot Robot { get; private set; }
-
-
 }
