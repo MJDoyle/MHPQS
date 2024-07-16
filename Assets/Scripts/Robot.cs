@@ -30,8 +30,6 @@ public class Robot : MonoBehaviour
 
 
 
-    public float YDist { get; private set; } = 0;
-
     public float Kth_pos { get; private set; } = 0;
 
     public float Kth_neg { get; private set; } = 0;
@@ -70,40 +68,7 @@ public class Robot : MonoBehaviour
             TotalForce += module.Value.GetComponent<Module>().ThrustForce;
 
             TotalTorque -= module.Value.transform.localPosition.x * module.Value.GetComponent<Module>().ThrustForce.y - module.Value.transform.localPosition.y * module.Value.GetComponent<Module>().ThrustForce.x;
-        }
-
-
-        //Calculate goal velocity
-        Vector2 transVelocity = new Vector2(-TotalForce.x * Kx, -TotalForce.y * Ky);
-
-        float thetaDot = 0;
-
-        if (TotalTorque >= 0)
-        {
-            thetaDot = TotalTorque * Kth_pos;
-        }
-
-        else
-        {
-            thetaDot = TotalTorque * Kth_neg;
-        }
-
-        Vector2 rotVelocity = Vector2.zero;
-
-        Vector2 relativeGoalPos = environment.Goal.transform.position - transform.position;
-
-        YDist = relativeGoalPos.y;
-
-        rotVelocity.x = -(relativeGoalPos).magnitude * thetaDot * Mathf.Sin(Mathf.Deg2Rad * Vector2.SignedAngle(new Vector2(1, 0), relativeGoalPos));
-
-        rotVelocity.y = (relativeGoalPos).magnitude * thetaDot * Mathf.Cos(Mathf.Deg2Rad * Vector2.SignedAngle(new Vector2(1, 0), relativeGoalPos));
-
-        Vector2 totalVelocity = transVelocity + rotVelocity;
-
-        Vector2 normVelocity = totalVelocity.normalized;
-
-
-        
+        }        
     }
 
 

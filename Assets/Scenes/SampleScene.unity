@@ -545,13 +545,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   environment: {fileID: 1320780542}
-  goalArrow: {fileID: 0}
-  forceArrow: {fileID: 0}
-  geomGoalArrow: {fileID: 0}
-  geomForceArrow: {fileID: 0}
-  goalVelocityArrow: {fileID: 0}
-  goalTransVelocityArrow: {fileID: 0}
-  goalRotVelocityArrow: {fileID: 0}
+  goalArrow: {fileID: 56535349}
+  forceArrow: {fileID: 289527211}
+  geomGoalArrow: {fileID: 77655712}
+  geomForceArrow: {fileID: 326532289}
+  goalVelocityArrow: {fileID: 1956750311}
+  goalTransVelocityArrow: {fileID: 339134088}
+  goalRotVelocityArrow: {fileID: 261242988}
 --- !u!1 &261242988
 GameObject:
   m_ObjectHideFlags: 0

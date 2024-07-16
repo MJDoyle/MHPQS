@@ -20,6 +20,6 @@ public class RobotInfo : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        infoText.text = "Torque: " + robot.TotalTorque + " XForce: " + robot.TotalForce.x + " YDist: " + robot.YDist + "\nKx: " + robot.Kx + " Ky: " + robot.Ky + " Kthp: " + robot.Kth_pos + " Kthn: " + robot.Kth_neg;
+        infoText.text = "Torque: " + robot.TotalTorque + " XForce: " + robot.TotalForce.x + " YDist: " + "todo" + "\nKx: " + robot.Kx + " Ky: " + robot.Ky + " Kthp: " + robot.Kth_pos + " Kthn: " + robot.Kth_neg;
     }
 }

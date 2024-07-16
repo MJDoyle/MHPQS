@@ -32,64 +32,96 @@ public class RobotUI : MonoBehaviour
     {
         if (environment.Robot.Modules.Count == 0)    
         {
-            //goalArrow.SetActive(false);
-            //forceArrow.SetActive(false);
-            //geomGoalArrow.SetActive(false);
-            //geomForceArrow.SetActive(false);
+            goalArrow.SetActive(false);
+            forceArrow.SetActive(false);
+            geomGoalArrow.SetActive(false);
+            geomForceArrow.SetActive(false);
 
             return;
         }
-   
-        //goalArrow.SetActive(true);
-        //forceArrow.SetActive(true);
-        //geomGoalArrow.SetActive(true);
-        //geomForceArrow.SetActive(true);
+
+        goalArrow.SetActive(true);
+        forceArrow.SetActive(true);
+        geomGoalArrow.SetActive(true);
+        geomForceArrow.SetActive(true);
 
 
-        //goalArrow.transform.right = environment.Goal.transform.position - goalArrow.transform.position;
+        goalArrow.transform.right = environment.Goal.transform.position - goalArrow.transform.position;
 
-        //geomGoalArrow.transform.position = environment.Robot.GeometricCenter;
+        geomGoalArrow.transform.position = environment.Robot.GeometricCenter;
 
-        //geomGoalArrow.transform.right = (Vector2)environment.Goal.transform.position - environment.Robot.GeometricCenter;
-
-
+        geomGoalArrow.transform.right = (Vector2)environment.Goal.transform.position - environment.Robot.GeometricCenter;
 
 
-        //forceArrow.transform.right = transform.TransformVector(environment.Robot.TotalForce);
-
-        //geomForceArrow.transform.position = environment.Robot.GeometricCenter;
-
-        //geomForceArrow.transform.right = transform.TransformVector(environment.Robot.TotalForce);
 
 
-        //goalVelocityArrow.transform.right = normVelocity;
+        forceArrow.transform.right = transform.TransformVector(environment.Robot.TotalForce);
+
+        geomForceArrow.transform.position = environment.Robot.GeometricCenter;
+
+        geomForceArrow.transform.right = transform.TransformVector(environment.Robot.TotalForce);
 
 
-        //if (rotVelocity == Vector2.zero)
-        //{
-        //    goalRotVelocityArrow.SetActive(false);
-        //}
 
-        //else
-        //{
-        //    goalRotVelocityArrow.SetActive(true);
 
-        //    goalRotVelocityArrow.transform.right = rotVelocity;
-        //}
+        //Calculate goal velocity
+        Vector2 transVelocity = new Vector2(-environment.Robot.TotalForce.x * environment.Robot.Kx, -environment.Robot.TotalForce.y * environment.Robot.Ky);
+
+        float thetaDot = 0;
+
+        if (environment.Robot.TotalTorque >= 0)
+        {
+            thetaDot = environment.Robot.TotalTorque * environment.Robot.Kth_pos;
+        }
+
+        else
+        {
+            thetaDot = environment.Robot.TotalTorque * environment.Robot.Kth_neg;
+        }
+
+        Vector2 rotVelocity = Vector2.zero;
+
+        Vector2 relativeGoalPos = environment.Goal.transform.position - environment.Robot.transform.position;
+
+        rotVelocity.x = -(relativeGoalPos).magnitude * thetaDot * Mathf.Sin(Mathf.Deg2Rad * Vector2.SignedAngle(new Vector2(1, 0), relativeGoalPos));
+
+        rotVelocity.y = (relativeGoalPos).magnitude * thetaDot * Mathf.Cos(Mathf.Deg2Rad * Vector2.SignedAngle(new Vector2(1, 0), relativeGoalPos));
+
+        Vector2 totalVelocity = transVelocity + rotVelocity;
+
+        Vector2 normVelocity = totalVelocity.normalized;
+
+
+
+
+        goalVelocityArrow.transform.right = normVelocity;
+
+
+        if (rotVelocity == Vector2.zero)
+        {
+            goalRotVelocityArrow.SetActive(false);
+        }
+
+        else
+        {
+            goalRotVelocityArrow.SetActive(true);
+
+            goalRotVelocityArrow.transform.right = rotVelocity;
+        }
 
         //Debug.Log(rotVelocity);
 
-        //goalRotVelocityArrow.transform.right = rotVelocity;
+        goalRotVelocityArrow.transform.right = rotVelocity;
 
-        //goalTransVelocityArrow.transform.right = transVelocity;
+        goalTransVelocityArrow.transform.right = transVelocity;
 
 
-        //goalVelocityArrow.transform.position = environment.Goal.transform.position;
+        goalVelocityArrow.transform.position = environment.Goal.transform.position;
 
-        //goalTransVelocityArrow.transform.position = environment.Goal.transform.position;
+        goalTransVelocityArrow.transform.position = environment.Goal.transform.position;
 
-        //goalRotVelocityArrow.transform.position = environment.Goal.transform.position;
-        
+        goalRotVelocityArrow.transform.position = environment.Goal.transform.position;
+
     }
 
 }
