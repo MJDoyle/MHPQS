@@ -497,16 +497,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b9563e1a8fee38489004a6772fe606a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  modulePrefab: {fileID: 93489557103547779, guid: 8d3e2ac6da5f334458d70f05c4833b91, type: 3}
-  goal: {fileID: 965417334}
-  goalArrow: {fileID: 56535349}
-  forceArrow: {fileID: 289527211}
-  geomGoalArrow: {fileID: 77655712}
-  geomForceArrow: {fileID: 326532289}
-  geometricCenter: {fileID: 732027497}
-  goalVelocityArrow: {fileID: 1956750311}
-  goalTransVelocityArrow: {fileID: 339134088}
-  goalRotVelocityArrow: {fileID: 261242988}
+  environment: {fileID: 1320780542}
+  modulePrefab: {fileID: 8690683239484191984, guid: 8d3e2ac6da5f334458d70f05c4833b91, type: 3}
 --- !u!4 &120372913
 Transform:
   m_ObjectHideFlags: 0
@@ -552,6 +544,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 101c014a98cddbb4aaf4d4f7d4078e59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  environment: {fileID: 1320780542}
+  goalArrow: {fileID: 0}
+  forceArrow: {fileID: 0}
+  geomGoalArrow: {fileID: 0}
+  geomForceArrow: {fileID: 0}
+  goalVelocityArrow: {fileID: 0}
+  goalTransVelocityArrow: {fileID: 0}
+  goalRotVelocityArrow: {fileID: 0}
 --- !u!1 &261242988
 GameObject:
   m_ObjectHideFlags: 0
@@ -1211,6 +1211,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1320780541
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1320780543}
+  - component: {fileID: 1320780542}
+  m_Layer: 0
+  m_Name: Environment
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1320780542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1320780541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b6c2db77f6b36d4ba0c7ba81cb695f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Goal>k__BackingField: {fileID: 965417334}
+  <Robot>k__BackingField: {fileID: 120372912}
+--- !u!4 &1320780543
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1320780541}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.1460934, y: 1.0024872, z: -1.4241455}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1956750311
 GameObject:

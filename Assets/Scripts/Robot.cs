@@ -313,16 +313,22 @@ public class Robot : MonoBehaviour
 
     public void AddRemoveModule(Vector2 mousePositionInWorld)
     {
+
+        //Transform world point into module coords
+
         Vector2 mousePositionInRobot = transform.InverseTransformPoint(mousePositionInWorld);
 
         Vector2 mousePositionInModuleGrid = mousePositionInRobot - gridOffset;
 
         Vector2Int mousePositionInModuleCoords = new Vector2Int(Mathf.FloorToInt(mousePositionInModuleGrid.x / moduleSize + 0.5f), Mathf.FloorToInt(mousePositionInModuleGrid.y / moduleSize + 0.5f));
 
-        bool moduleInThisPosition = false;
+        Vector2 modulePositionInRobot = (Vector2)mousePositionInModuleCoords * moduleSize;
 
-        if (Modules.ContainsKey(mousePositionInModuleCoords))
-            moduleInThisPosition = true;
+
+
+        //Check existence of modules in this and neighbouring positions
+
+        bool moduleInThisPosition = Modules.ContainsKey(mousePositionInModuleCoords);
 
         bool moduleNeighbouringThisPosition = false;
 
@@ -338,19 +344,18 @@ public class Robot : MonoBehaviour
         if (Modules.ContainsKey(mousePositionInModuleCoords + new Vector2Int(0, -1)))
             moduleNeighbouringThisPosition = true;
 
-        Vector2 modulePositionInRobot = (Vector2)mousePositionInModuleCoords * moduleSize;
-
+     
 
         //If there is a neighbour tile (or no tiles at all) and no tile in this position already, then add a tile
-        if (Input.GetMouseButtonDown(0) && !moduleInThisPosition && (moduleNeighbouringThisPosition || Modules.Count == 0))
+        if (!moduleInThisPosition && (moduleNeighbouringThisPosition || Modules.Count == 0))
         {
             Modules[mousePositionInModuleCoords] = Instantiate(modulePrefab, modulePositionInRobot, transform.rotation, transform);
         }
 
         //If there is a module in this position, delete it
-        if (Input.GetMouseButtonDown(1) && moduleInThisPosition)
+        else if (moduleInThisPosition)
         {
-            Destroy(Modules[mousePositionInModuleCoords]);
+            Destroy(Modules[mousePositionInModuleCoords].gameObject);
             Modules.Remove(mousePositionInModuleCoords);
         }
 
