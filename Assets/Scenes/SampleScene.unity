@@ -477,6 +477,7 @@ GameObject:
   - component: {fileID: 120372913}
   - component: {fileID: 120372912}
   - component: {fileID: 120372914}
+  - component: {fileID: 120372915}
   m_Layer: 0
   m_Name: Robot
   m_TagString: Untagged
@@ -539,6 +540,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   infoText: {fileID: 81532789}
+--- !u!114 &120372915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120372911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 101c014a98cddbb4aaf4d4f7d4078e59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &261242988
 GameObject:
   m_ObjectHideFlags: 0
@@ -909,7 +922,7 @@ MonoBehaviour:
   minPanSpeed: 5
   maxPanSpeed: 10
   secToMaxSpeed: 1
-  zoomSpeed: 10
+  zoomSpeed: 1
   minimumZoom: 5
   maximumZoom: 250
 --- !u!20 &519420031

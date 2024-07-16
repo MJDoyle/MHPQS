@@ -6,9 +6,7 @@ public class Face : MonoBehaviour
 {
     private GameObject activeFaceIndicator;
 
-    private GameObject goal;
-
-    public Vector2 thrustForce = Vector2.zero;
+    public Vector2 ThrustForce { get; private set; } = Vector2.zero;
 
     bool occluded = false;
 
@@ -18,23 +16,21 @@ public class Face : MonoBehaviour
         activeFaceIndicator = transform.GetChild(0).gameObject;
 
         activeFaceIndicator.SetActive(false);
-
-        goal = GetComponentInParent<Robot>().goal;
     }
 
 
-    //Update the controller
-    private void FixedUpdate()
+
+    public void DetermineOcclusion(GameObject goal)
     {
-        CheckOcclusionByThisModule();
+        CheckOcclusionByThisModule(goal);
 
         if (!occluded)
-            CheckOcclusionByOtherModules();
+            CheckOcclusionByOtherModules(goal);
 
         if (occluded)
         {
             activeFaceIndicator.SetActive(true);
-            thrustForce = -transform.right;
+            ThrustForce = -transform.right;
 
             Debug.DrawLine(transform.position, transform.position + 0.3f * transform.right, Color.magenta);
 
@@ -45,12 +41,13 @@ public class Face : MonoBehaviour
         else
         {
             activeFaceIndicator.SetActive(false);
-            thrustForce = Vector2.zero;
+            ThrustForce = Vector2.zero;
         }
     }
 
 
-    private void CheckOcclusionByThisModule()
+
+    private void CheckOcclusionByThisModule(GameObject goal)
     {
         //Goal in face space
         Vector2 goalPosition = transform.InverseTransformPoint(goal.transform.position);
@@ -63,7 +60,7 @@ public class Face : MonoBehaviour
             occluded = true;
     }
 
-    private void CheckOcclusionByOtherModules()
+    private void CheckOcclusionByOtherModules(GameObject goal)
     {
         List<RaycastHit2D> hits = new List<RaycastHit2D>();
 

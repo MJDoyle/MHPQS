@@ -14,18 +14,23 @@ public class Module : MonoBehaviour
 
     public GameObject bottomFace;
 
-    public Vector2 ThrustForce()
+    public Vector2 ThrustForce { get; private set; } = Vector2.zero;
+
+    public Vector2 CalculateThrustForce(GameObject goal)
     {
-        Vector2 thrustForce = Vector2.zero;
+
+        //Face - calculate ooclusion
+
+        ThrustForce = Vector2.zero;
 
         foreach (GameObject face in faces)
         {
             if (face.activeSelf)
             {
-                thrustForce += face.GetComponent<Face>().thrustForce;
+                ThrustForce += face.GetComponent<Face>().ThrustForce;
             }
         }
 
-        return thrustForce;
+        return ThrustForce;
     }
 }
