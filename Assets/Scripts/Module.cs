@@ -4,30 +4,29 @@ using UnityEngine;
 
 public class Module : MonoBehaviour
 {
-    public GameObject[] faces;
+    public Face[] faces;
 
-    public GameObject leftFace;
+    public Face leftFace;
 
-    public GameObject rightFace;
+    public Face rightFace;
 
-    public GameObject topFace;
+    public Face topFace;
 
-    public GameObject bottomFace;
+    public Face bottomFace;
 
     public Vector2 ThrustForce { get; private set; } = Vector2.zero;
 
     public Vector2 CalculateThrustForce(GameObject goal)
     {
-
-        //Face - calculate ooclusion
-
         ThrustForce = Vector2.zero;
 
-        foreach (GameObject face in faces)
+        foreach (Face face in faces)
         {
-            if (face.activeSelf)
+            if (face.gameObject.activeSelf)
             {
-                ThrustForce += face.GetComponent<Face>().ThrustForce;
+                face.DetermineOcclusion(goal);
+
+                ThrustForce += face.ThrustForce;
             }
         }
 

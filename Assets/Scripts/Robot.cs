@@ -387,13 +387,13 @@ public class Robot : MonoBehaviour
         //Set internal faces as inactive and external faces as active
         foreach (KeyValuePair<Vector2Int, Module> module in Modules)
         {
-            module.Value.rightFace.SetActive(!Modules.ContainsKey(module.Key + new Vector2Int(1, 0)));
+            module.Value.rightFace.gameObject.SetActive(!Modules.ContainsKey(module.Key + new Vector2Int(1, 0)));
 
-            module.Value.leftFace.SetActive(!Modules.ContainsKey(module.Key + new Vector2Int(-1, 0)));
+            module.Value.leftFace.gameObject.SetActive(!Modules.ContainsKey(module.Key + new Vector2Int(-1, 0)));
 
-            module.Value.topFace.SetActive(!Modules.ContainsKey(module.Key + new Vector2Int(0, 1)));
+            module.Value.topFace.gameObject.SetActive(!Modules.ContainsKey(module.Key + new Vector2Int(0, 1)));
 
-            module.Value.bottomFace.SetActive(!Modules.ContainsKey(module.Key + new Vector2Int(0, -1)));
+            module.Value.bottomFace.gameObject.SetActive(!Modules.ContainsKey(module.Key + new Vector2Int(0, -1)));
         }
 
         CalculateKValues();

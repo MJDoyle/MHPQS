@@ -22,12 +22,7 @@ public class Face : MonoBehaviour
 
     public void DetermineOcclusion(GameObject goal)
     {
-        CheckOcclusionByThisModule(goal);
-
-        if (!occluded)
-            CheckOcclusionByOtherModules(goal);
-
-        if (occluded)
+        if (OccludedByThisModule(goal) || OccludedByOtherModules(goal))
         {
             activeFaceIndicator.SetActive(true);
             ThrustForce = -transform.right;
@@ -47,20 +42,20 @@ public class Face : MonoBehaviour
 
 
 
-    private void CheckOcclusionByThisModule(GameObject goal)
+    private bool OccludedByThisModule(GameObject goal)
     {
         //Goal in face space
         Vector2 goalPosition = transform.InverseTransformPoint(goal.transform.position);
 
         //If goal position is behind the face then it is occluded
         if (goalPosition.x > 0)
-            occluded = false;
+            return false;
 
         else
-            occluded = true;
+            return true;
     }
 
-    private void CheckOcclusionByOtherModules(GameObject goal)
+    private bool OccludedByOtherModules(GameObject goal)
     {
         List<RaycastHit2D> hits = new List<RaycastHit2D>();
 
@@ -70,9 +65,9 @@ public class Face : MonoBehaviour
 
         //One hit will be the module itself
         if (numHits > 1)
-            occluded = true;
+            return true;
 
         else
-            occluded = false;
+            return false;
     }
 }
