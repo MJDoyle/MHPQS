@@ -276,7 +276,7 @@ public class Robot : MonoBehaviour
     }
 
 
-    public void AddRemoveModule(Vector2 mousePositionInWorld)
+    public void AddRemoveModule(Vector2 mousePositionInWorld, bool add)
     {
 
         //Transform world point into module coords
@@ -312,17 +312,20 @@ public class Robot : MonoBehaviour
      
 
         //If there is a neighbour tile (or no tiles at all) and no tile in this position already, then add a tile
-        if (!moduleInThisPosition && (moduleNeighbouringThisPosition || Modules.Count == 0))
+        if (add && !moduleInThisPosition && (moduleNeighbouringThisPosition || Modules.Count == 0))
         {
             Modules[mousePositionInModuleCoords] = Instantiate(modulePrefab, modulePositionInRobot, transform.rotation, transform);
         }
 
         //If there is a module in this position, delete it
-        else if (moduleInThisPosition)
+        else if (!add && moduleInThisPosition)
         {
             Destroy(Modules[mousePositionInModuleCoords].gameObject);
             Modules.Remove(mousePositionInModuleCoords);
         }
+
+        if (Modules.Count < 1)
+            return;
 
         //Update module positions, robot com etc.
 

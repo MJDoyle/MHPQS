@@ -12,7 +12,7 @@ public class Environment : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(0))
         {
             //Set goal position
             if (Input.GetKey(KeyCode.LeftControl))
@@ -22,7 +22,12 @@ public class Environment : MonoBehaviour
                 return;
             }
 
-            Robot.AddRemoveModule((Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            Robot.AddRemoveModule(Camera.main.ScreenToWorldPoint(Input.mousePosition), true);
+        }
+
+        else if (Input.GetMouseButtonDown(1))
+        {
+            Robot.AddRemoveModule(Camera.main.ScreenToWorldPoint(Input.mousePosition), false);
         }
     }
 
