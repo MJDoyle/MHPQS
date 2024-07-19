@@ -48,16 +48,16 @@ public class RobotUI : MonoBehaviour
 
         goalArrow.transform.right = environment.Goal.transform.position - goalArrow.transform.position;
 
-        geomGoalArrow.transform.position = environment.Robot.GeometricCenter;
+        geomGoalArrow.transform.position = environment.Robot.transform.TransformPoint(environment.Robot.GeometricCenter);
 
-        geomGoalArrow.transform.right = (Vector2)environment.Goal.transform.position - environment.Robot.GeometricCenter;
+        geomGoalArrow.transform.right = environment.Goal.transform.position - environment.Robot.transform.TransformPoint(environment.Robot.GeometricCenter);
 
 
 
 
         forceArrow.transform.right = transform.TransformVector(environment.Robot.TotalForce);
 
-        geomForceArrow.transform.position = environment.Robot.GeometricCenter;
+        geomForceArrow.transform.position = environment.Robot.transform.TransformPoint(environment.Robot.GeometricCenter);
 
         geomForceArrow.transform.right = transform.TransformVector(environment.Robot.TotalForce);
 

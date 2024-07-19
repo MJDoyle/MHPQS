@@ -86,30 +86,30 @@ public class Robot : MonoBehaviour
 
             foreach (KeyValuePair<Vector2Int, Module> module in Modules)
             {
-                minX = module.Value.transform.position.x;
+                minX = module.Value.transform.localPosition.x;
 
-                maxX = module.Value.transform.position.x;
+                maxX = module.Value.transform.localPosition.x;
 
-                minY = module.Value.transform.position.y;
+                minY = module.Value.transform.localPosition.y;
 
-                maxY = module.Value.transform.position.y;
+                maxY = module.Value.transform.localPosition.y;
 
                 break;
             }
 
             foreach (KeyValuePair<Vector2Int, Module> module in Modules)
             {
-                if (module.Value.transform.position.x < minX)
-                    minX = module.Value.transform.position.x;
+                if (module.Value.transform.localPosition.x < minX)
+                    minX = module.Value.transform.localPosition.x;
 
-                if (module.Value.transform.position.x > maxX)
-                    maxX = module.Value.transform.position.x;
+                if (module.Value.transform.localPosition.x > maxX)
+                    maxX = module.Value.transform.localPosition.x;
 
-                if (module.Value.transform.position.y < minY)
-                    minY = module.Value.transform.position.y;
+                if (module.Value.transform.localPosition.y < minY)
+                    minY = module.Value.transform.localPosition.y;
 
-                if (module.Value.transform.position.y > maxY)
-                    maxY = module.Value.transform.position.y;
+                if (module.Value.transform.localPosition.y > maxY)
+                    maxY = module.Value.transform.localPosition.y;
 
             }
 
