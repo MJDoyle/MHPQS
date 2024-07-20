@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaad52c6d3ed0354fa5ffa3a053362ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  faces:
+  <Faces>k__BackingField:
   - {fileID: 7742635641131038314}
   - {fileID: 3157491109776123284}
   - {fileID: 3892663054168883966}

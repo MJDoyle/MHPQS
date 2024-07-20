@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Module : MonoBehaviour
 {
-    public Face[] faces;
+    [field: SerializeField]
+    public Face[] Faces { get; private set; }
 
     public Face leftFace;
 
@@ -20,7 +21,7 @@ public class Module : MonoBehaviour
     {
         ThrustForce = Vector2.zero;
 
-        foreach (Face face in faces)
+        foreach (Face face in Faces)
         {
             if (face.gameObject.activeSelf)
             {
