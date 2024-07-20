@@ -9,42 +9,58 @@ public class RobotUI : MonoBehaviour
 
     [SerializeField]
     private GameObject goalArrow;
-
     [SerializeField]
     private GameObject forceArrow;
 
     [SerializeField]
     private GameObject geomGoalArrow;
-
     [SerializeField]
     private GameObject geomForceArrow;
 
     [SerializeField]
     private GameObject goalVelocityArrow;
-
     [SerializeField]
     private GameObject goalTransVelocityArrow;
-
     [SerializeField]
     private GameObject goalRotVelocityArrow;
 
+    private bool showGoalArrows = true;
+
+    private bool showGeomArrows = true;
+
+    private bool showComArrows = true;
+
     private void FixedUpdate()
     {
-        if (environment.Robot.Modules.Count == 0)    
-        {
-            goalArrow.SetActive(false);
-            forceArrow.SetActive(false);
-            geomGoalArrow.SetActive(false);
-            geomForceArrow.SetActive(false);
+        goalArrow.SetActive(false);
+        forceArrow.SetActive(false);
+        geomGoalArrow.SetActive(false);
+        geomForceArrow.SetActive(false);
+        goalVelocityArrow.SetActive(false);
+        goalTransVelocityArrow.SetActive(false);
+        goalRotVelocityArrow.SetActive(false);
 
+        if (environment.Robot.Modules.Count == 0)
             return;
+
+        if (showGoalArrows)
+        {
+            goalVelocityArrow.SetActive(true);
+            goalTransVelocityArrow.SetActive(true);
+            goalRotVelocityArrow.SetActive(true);
         }
 
-        goalArrow.SetActive(true);
-        forceArrow.SetActive(true);
-        geomGoalArrow.SetActive(true);
-        geomForceArrow.SetActive(true);
+        if (showGeomArrows)
+        {
+            geomGoalArrow.SetActive(true);
+            geomForceArrow.SetActive(true);
+        }
 
+        if (showComArrows)
+        {
+            goalArrow.SetActive(true);
+            forceArrow.SetActive(true);
+        }
 
         goalArrow.transform.right = environment.Goal.transform.position - goalArrow.transform.position;
 
@@ -102,7 +118,7 @@ public class RobotUI : MonoBehaviour
             goalRotVelocityArrow.SetActive(false);
         }
 
-        else
+        else if (showGoalArrows)
         {
             goalRotVelocityArrow.SetActive(true);
 
@@ -124,4 +140,18 @@ public class RobotUI : MonoBehaviour
 
     }
 
+    public void ToggleGoalArrows()
+    {
+        showGoalArrows = !showGoalArrows;
+    }
+
+    public void ToggleGeomArrows()
+    {
+        showGeomArrows = !showGeomArrows;
+    }
+
+    public void ToggleComArrows()
+    {
+        showComArrows = !showComArrows;
+    }
 }

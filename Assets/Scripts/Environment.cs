@@ -12,6 +12,12 @@ public class Environment : MonoBehaviour
 
     private void Update()
     {
+
+        //Ignore clicks on the UI
+
+        if (Input.mousePosition.y <= 60)
+            return;
+
         if (Input.GetMouseButtonDown(0))
         {
             //Set goal position
