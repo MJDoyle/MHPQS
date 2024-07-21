@@ -8,7 +8,11 @@ public class Face : MonoBehaviour
 
     public Vector2 ThrustForce { get; private set; } = Vector2.zero;
 
-    
+    public float MinTheta { get; set; } = -90f;
+
+    public float MaxTheta { get; set; } = 90f;
+
+    public bool External { get; set; } = true;
 
     private bool occluded = false;
 
@@ -22,18 +26,25 @@ public class Face : MonoBehaviour
         activeFaceIndicator.SetActive(false);
     }
 
+    private void Update()
+    {
+        if (!External)
+            activeFaceIndicator.SetActive(false);
+    }
+
 
 
     public void DetermineOcclusion(GameObject goal)
     {
+
+
+
         if (OccludedByThisModule(goal) || OccludedByOtherModules(goal))
         {
             activeFaceIndicator.SetActive(true);
             ThrustForce = -transform.right;
 
             Debug.DrawLine(transform.position, transform.position + 0.3f * transform.right, Color.magenta);
-
-            //Debug.DrawRay(transform.position, transform.right, Color.magenta);
 
         }
 

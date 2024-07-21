@@ -150,48 +150,12 @@ public class RobotUI : MonoBehaviour
         {
             foreach (Face face in modulePair.Value.Faces)
             {
-                List<float> angles = new List<float>();
+                if (!face.External)
+                    continue;
+                
+                Debug.DrawRay(face.transform.position, Quaternion.Euler(0, 0, face.MinTheta) * face.transform.right * 100, Color.red);
 
-                foreach (KeyValuePair<Vector2Int, Module> modulePair2 in environment.Robot.Modules)
-                {
-                    Module module = modulePair2.Value;
-
-                    List<Vector2> corners = new List<Vector2> { new Vector2(0.5f, 0.5f), new Vector2(0.5f, -0.5f), new Vector2(-0.5f, -0.5f), new Vector2(-0.5f, 0.5f) };
-                    List<Vector2> corners_ws = new List<Vector2>();
-                    List<Vector2> corners_fs = new List<Vector2>();
-
-                    //Get the module corner points in world space
-                    foreach (Vector2 corner in corners)
-                        corners_ws.Add(module.transform.TransformPoint(corner));
-
-                    //Get the module corner points in face space
-                    foreach (Vector2 corner_ws in corners_ws)
-                        corners_fs.Add(face.transform.InverseTransformPoint(corner_ws));
-
-
-                    //Get the signed angle between face normal and the line to each corner point
-                    foreach (Vector2 corner_fs in corners_fs)
-                        angles.Add(Vector2.SignedAngle(Vector2.right, corner_fs));
-                }
-
-                //The smallest positive and smallest negative angles define the fov for that face
-
-                float minTheta = -90;
-
-                float maxTheta = 90;
-
-                foreach (float angle in angles)
-                {
-                    if (angle <= 0 && angle > minTheta)
-                        minTheta = angle;
-
-                    if (angle >= 0 && angle < maxTheta)
-                        maxTheta = angle;
-                }
-
-                Debug.DrawRay(face.transform.position, Quaternion.Euler(0, 0, minTheta) * face.transform.right);
-
-                Debug.DrawRay(face.transform.position, Quaternion.Euler(0, 0, maxTheta) * face.transform.right);
+                Debug.DrawRay(face.transform.position, Quaternion.Euler(0, 0, face.MaxTheta) * face.transform.right * 100, Color.green);
 
 
             }

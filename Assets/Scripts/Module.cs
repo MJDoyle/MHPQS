@@ -23,7 +23,7 @@ public class Module : MonoBehaviour
 
         foreach (Face face in Faces)
         {
-            if (face.gameObject.activeSelf)
+            if (face.External)
             {
                 face.DetermineOcclusion(goal);
 

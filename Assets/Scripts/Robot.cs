@@ -140,8 +140,8 @@ public class Robot : MonoBehaviour
             }
         }
 
-        Debug.Log("k_x: " + 1f / (float)xfaces);
-        Debug.Log("k_y: " + 1f / (float)yfaces);
+        //Debug.Log("k_x: " + 1f / (float)xfaces);
+        //Debug.Log("k_y: " + 1f / (float)yfaces);
 
         Kx = 1f / (float)xfaces;
         Ky = 1f / (float)yfaces;
@@ -150,7 +150,7 @@ public class Robot : MonoBehaviour
 
         float kRotP = 0;
 
-        Debug.Log("Calculating k rot");
+        //Debug.Log("Calculating k rot");
 
         foreach (KeyValuePair<Vector2Int, Module> module in Modules)
         {
@@ -164,9 +164,9 @@ public class Robot : MonoBehaviour
 
                 kRotP += facePos.y * facePos.y / facePos.magnitude;
 
-                Debug.Log("kRotP1");
-                Debug.Log(kRotP);
-                Debug.Log(facePos);
+                //Debug.Log("kRotP1");
+                //Debug.Log(kRotP);
+                //Debug.Log(facePos);
             }
 
             //-x face
@@ -176,9 +176,9 @@ public class Robot : MonoBehaviour
 
                 kRotP += facePos.y * facePos.y / facePos.magnitude;
 
-                Debug.Log("kRotP2");
-                Debug.Log(kRotP);
-                Debug.Log(facePos);
+                //Debug.Log("kRotP2");
+                //Debug.Log(kRotP);
+                //Debug.Log(facePos);
             }
 
             //+y face
@@ -188,9 +188,9 @@ public class Robot : MonoBehaviour
 
                 kRotP += facePos.x * facePos.x / facePos.magnitude;
 
-                Debug.Log("kRotP3");
-                Debug.Log(kRotP);
-                Debug.Log(facePos);
+                //Debug.Log("kRotP3");
+                //Debug.Log(kRotP);
+                //Debug.Log(facePos);
             }
 
             //-y face
@@ -200,16 +200,16 @@ public class Robot : MonoBehaviour
 
                 kRotP += facePos.x * facePos.x / facePos.magnitude;
 
-                Debug.Log("kRotP4");
-                Debug.Log(kRotP);
-                Debug.Log(facePos);
+                //Debug.Log("kRotP4");
+                //Debug.Log(kRotP);
+                //Debug.Log(facePos);
             }
         }
 
         if (kRotP != 0)
             kRotP = 1f / kRotP;
 
-        Debug.Log("k_th+: " + kRotP);
+        //Debug.Log("k_th+: " + kRotP);
 
         Kth_pos = kRotP;
 
@@ -229,8 +229,8 @@ public class Robot : MonoBehaviour
 
                 kRotN += facePos.y * facePos.y / facePos.magnitude;
 
-                Debug.Log("kRotN1");
-                Debug.Log(kRotN);
+                //Debug.Log("kRotN1");
+                //Debug.Log(kRotN);
             }
 
             //-x face
@@ -240,8 +240,8 @@ public class Robot : MonoBehaviour
 
                 kRotN += facePos.y * facePos.y / facePos.magnitude;
 
-                Debug.Log("kRotN2");
-                Debug.Log(kRotN);
+                //Debug.Log("kRotN2");
+                //Debug.Log(kRotN);
             }
 
             //+y face
@@ -251,8 +251,8 @@ public class Robot : MonoBehaviour
 
                 kRotN += facePos.x * facePos.x / facePos.magnitude;
 
-                Debug.Log("kRotN3");
-                Debug.Log(kRotN);
+                //Debug.Log("kRotN3");
+                //Debug.Log(kRotN);
             }
 
             //-y face
@@ -262,15 +262,15 @@ public class Robot : MonoBehaviour
 
                 kRotN += facePos.x * facePos.x / facePos.magnitude;
 
-                Debug.Log("kRotN4");
-                Debug.Log(kRotN);
+                //Debug.Log("kRotN4");
+                //Debug.Log(kRotN);
             }
         }
 
         if (kRotN != 0)
             kRotN = 1f / kRotN;
 
-        Debug.Log("k_th-: " + kRotN);
+        //Debug.Log("k_th-: " + kRotN);
 
         Kth_neg = kRotN;
     }
@@ -355,18 +355,91 @@ public class Robot : MonoBehaviour
         //Set internal faces as inactive and external faces as active
         foreach (KeyValuePair<Vector2Int, Module> module in Modules)
         {
-            module.Value.rightFace.gameObject.SetActive(!Modules.ContainsKey(module.Key + new Vector2Int(1, 0)));
+            module.Value.rightFace.External = !Modules.ContainsKey(module.Key + new Vector2Int(1, 0));
 
-            module.Value.leftFace.gameObject.SetActive(!Modules.ContainsKey(module.Key + new Vector2Int(-1, 0)));
+            module.Value.leftFace.External = !Modules.ContainsKey(module.Key + new Vector2Int(-1, 0));
 
-            module.Value.topFace.gameObject.SetActive(!Modules.ContainsKey(module.Key + new Vector2Int(0, 1)));
+            module.Value.topFace.External = !Modules.ContainsKey(module.Key + new Vector2Int(0, 1));
 
-            module.Value.bottomFace.gameObject.SetActive(!Modules.ContainsKey(module.Key + new Vector2Int(0, -1)));
+            module.Value.bottomFace.External = !Modules.ContainsKey(module.Key + new Vector2Int(0, -1));
         }
 
         CalculateKValues();
 
         CalculateGeometricCenter();
+
+        CalculateFovs();
+    }
+
+    private void CalculateFovs()
+    {
+
+        Debug.Log("CALCULATING FOVS");
+
+        foreach (KeyValuePair<Vector2Int, Module> modulePair in Modules)
+        {
+            foreach (Face face in modulePair.Value.Faces)
+            {
+
+                Debug.Log("NEW FACE");
+
+                if (!face.External)
+                    continue;
+
+                List<float> angles = new List<float>();
+
+                foreach (KeyValuePair<Vector2Int, Module> modulePair2 in environment.Robot.Modules)
+                {
+                    Module module = modulePair2.Value;
+
+                    List<Vector2> corners = new List<Vector2> { new Vector2(0.5f, 0.5f), new Vector2(0.5f, -0.5f), new Vector2(-0.5f, -0.5f), new Vector2(-0.5f, 0.5f) };
+                    List<Vector2> corners_ws = new List<Vector2>();
+                    List<Vector2> corners_fs = new List<Vector2>();
+
+                    //Get the module corner points in world space
+                    foreach (Vector2 corner in corners)
+                        corners_ws.Add(module.transform.TransformPoint(corner));
+
+                    foreach (Vector2 corner_ws in corners_ws)
+                        Debug.Log(corner_ws);
+
+                    //Get the module corner points in face space
+                    foreach (Vector2 corner_ws in corners_ws)
+                        corners_fs.Add(face.transform.InverseTransformPoint(corner_ws));
+
+
+                    foreach (Vector2 corner_fs in corners_fs)
+                        Debug.Log(corner_fs);
+
+                    //Get the signed angle between face normal and the line to each corner point
+                    foreach (Vector2 corner_fs in corners_fs)
+                        angles.Add(Vector2.SignedAngle(Vector2.right, corner_fs));
+                }
+
+                //The smallest positive and smallest negative angles define the fov for that face
+
+                float minTheta = -90;
+
+                float maxTheta = 90;
+
+                foreach (float angle in angles)
+                {
+                    if (angle <= 0 && angle > minTheta)
+                        minTheta = angle;
+
+                    if (angle >= 0 && angle < maxTheta)
+                        maxTheta = angle;
+                }
+
+                face.MaxTheta = maxTheta;
+
+                face.MinTheta = minTheta;
+
+                Debug.Log("Max theta: " + maxTheta);
+
+                Debug.Log("Min theta: " + minTheta);
+            }
+        }
     }
 
 }
