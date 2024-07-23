@@ -76,13 +76,23 @@ public class Face : MonoBehaviour
 
         int numHits = Physics2D.Raycast(transform.position, goal.transform.position - transform.position, new ContactFilter2D(), hits);
 
-        //Debug.DrawRay(transform.position, goal.transform.position - transform.position, Color.magenta);
+        Debug.DrawRay(transform.position, goal.transform.position - transform.position, Color.magenta);
+
+        foreach (RaycastHit2D hit in hits)
+        {
+            //Debug.DrawRay(hit.point, hit.normal, Color.cyan);
+
+            if (hit.collider.gameObject.transform != transform.parent)
+                return true;
+        }
+
+        return false;
 
         //One hit will be the module itself
-        if (numHits > 1)
-            return true;
+        //if (numHits > 1)
+        //    return true;
 
-        else
-            return false;
+        //else
+        //    return false;
     }
 }

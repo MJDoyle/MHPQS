@@ -368,7 +368,7 @@ public class Robot : MonoBehaviour
 
         CalculateGeometricCenter();
 
-        CalculateFovs();
+        //CalculateFovs();
     }
 
     private void CalculateFovs()
